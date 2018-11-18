@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">Cardiac Arrest Detector</string>
+
+    <!-- Strings related to language -->
+    <string name="action_arabic">العربية</string>
+    <string name="action_english">English</string>
+
+    <!-- Strings related to login -->
+    <string name="title_activity_login">التسجيل او تسجيل الدخول</string>
+    <string name="prompt_email">البريد الالكتروني</string>
+    <string name="prompt_password">الرقم السري (اختياري)</string>
+
+    <string name="action_sign_in_short">Sign in or Register</string>
+    <string name="error_invalid_email">البريد الالكتروني غير صالح</string>
+    <string name="error_invalid_password">الرمز السري قصير جدا</string>
+    <string name="error_incorrect_password">الرمز السري غير صحيح</string>
+    <string name="error_field_required">حقل إجباري</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="action_sign_up">سـجـل الآن</string>
+    <string name="btn_sign_up">سـجـل الآن</string>
+    <string name="action_sign_in">تسجيل الدخول</string>
+    <string name="btn_sign_in">تسجيل الدخول</string>
+
+
+    <string name="prompt_phone">الهاتف</string>
+    <string name="prompt_name">الاسم</string>
+    <string name="prompt_age">العمر</string>
+
+    <string name="action_connect_bluetooth">الاتصال بالبلوتوث</string>
+
+    <string name="error_invalid_phone">رقم الهاتف غير صالح</string>
+    <string name="none_paired">15</string>
+    <string name="none_found">16</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_beloved"> Fill Beloved Circle</string>
+    <string name="guide">هذا دليل الاستخدام</string>
+    <string name="chk_btn_dontshow">عدم الإظهار مرة أخرى</string>
+
+    <string name="btn_next">التالي</string>
+
+
+
+    <string name="bluetooth_guide_area">This is our BLutooth connection Guide</string>
+    <string name="beloved_guide">Beloved circle is refere to the pepole you wish us to contact when there is something regarding your health</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+</resources>

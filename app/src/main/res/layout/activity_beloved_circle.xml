@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
-            android:text="@string/action_fill_beloved_circle"
+            android:text="@string/btn_next"
             android:textStyle="bold" />
 
     </LinearLayout>

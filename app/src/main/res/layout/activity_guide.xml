@@ -29,7 +29,7 @@
             android:id="@+id/show_again"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Don't show again" />
+            android:text="@string/chk_btn_dontshow" />
         <Button
             android:id="@+id/next"
             style="?android:textAppearanceSmall"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
-            android:text="Next"
+            android:text="@string/btn_next"
             android:textStyle="bold" />
 
 

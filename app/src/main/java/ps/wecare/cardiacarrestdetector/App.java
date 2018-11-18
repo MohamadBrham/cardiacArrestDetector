@@ -74,6 +74,9 @@ public class App extends Application {
     public final String NAME = "NAME";
     public final String PHONE = "PhoneNumber";
     public final String PASS = "Password";
+    public final String SHOW_GUIDE_AGAIN = "SHOW_GUIDE_AGAIN";
+
+
 
     public SharedPreferences getSharedPreferences() {
         if (mSharedPreferences == null)
@@ -91,9 +94,14 @@ public class App extends Application {
         editor.putString(NAME, name);
         editor.putString(PHONE, phone);
         editor.putString(PASS, password);
+
         editor.apply();
     }
-
+    public void setWithoutGuide(){
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.putBoolean(SHOW_GUIDE_AGAIN, false);
+        editor.apply();
+    }
     public void logOut() {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
         editor.putBoolean(IS_LOGGED_IN, false);
@@ -105,7 +113,7 @@ public class App extends Application {
     public boolean isLoggedIn() {
         return getSharedPreferences().getBoolean(IS_LOGGED_IN, false);
     }
-
+    public boolean showGuide(){return getSharedPreferences().getBoolean(SHOW_GUIDE_AGAIN, true);}
 
 
 

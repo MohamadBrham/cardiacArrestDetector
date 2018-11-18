@@ -6,16 +6,22 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,21 +65,27 @@ public class LoginActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        // make the title centered
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.centered_title_layout);
+        ((TextView)getSupportActionBar().getCustomView().findViewById(R.id.tvTitle)).setText(R.string.title_activity_login);
         // Set up tab host
 
         tabs=(TabHost)findViewById(R.id.tabHost);
 
         tabs.setup();
 
-        TabHost.TabSpec spec=tabs.newTabSpec("login");
+        TabHost.TabSpec spec = tabs.newTabSpec("login");
 
         spec.setContent(R.id.SignIn);
-        spec.setIndicator("Sign In");
+        //spec.setIndicator(R.string.btn_sign_in);
+        spec.setIndicator(getString(R.string.btn_sign_in) );
+
         tabs.addTab(spec);
 
         spec=tabs.newTabSpec("signup");
         spec.setContent(R.id.SignUp);
-        spec.setIndicator("Sign Up");
+        spec.setIndicator(getString(R.string.btn_sign_up) );
         tabs.addTab(spec);
 
 

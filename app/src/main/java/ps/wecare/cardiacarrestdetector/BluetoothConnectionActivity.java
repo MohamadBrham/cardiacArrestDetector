@@ -30,6 +30,8 @@ import java.util.Random;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
+import ps.wecare.cardiacarrestdetector.db.Message;
+import ps.wecare.cardiacarrestdetector.db.myDbAdapter;
 
 
 public class BluetoothConnectionActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
@@ -201,6 +203,12 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
 
         } else if (id == R.id.nav_send) {
 
+        }else if (id == R.id.nav_logout) {
+            Message.message(this,"Logout");
+            App.getInstance().logOut();
+            Intent n = new Intent(BluetoothConnectionActivity.this, LoginActivity.class);
+            BluetoothConnectionActivity.this.startActivity(n);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

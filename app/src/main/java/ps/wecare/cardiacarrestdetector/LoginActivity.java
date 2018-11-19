@@ -38,6 +38,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import ps.wecare.cardiacarrestdetector.db.Message;
+import ps.wecare.cardiacarrestdetector.db.User;
+import ps.wecare.cardiacarrestdetector.db.myDbAdapter;
+
 /**
  * A login screen that offers login via email/password.
  */
@@ -50,14 +54,24 @@ public class LoginActivity extends AppCompatActivity  {
     private boolean blockLogin = false;
     private String tag = "LOGIN";
 
-
-    // UI references.
-    private AutoCompleteTextView mPhoneView;
-    private AutoCompleteTextView mNameView;
+    // sign UP
     private AutoCompleteTextView mSignupPhoneView;
-    private EditText mPasswordView;
+    private AutoCompleteTextView mSignupAgeView;
+    private AutoCompleteTextView mSignupNameView;
+    private EditText mSignupPasswordView;
+    private Button mSigninButton ;
+    private Button mSignupButton ;
+
+
+    // Sign In
+    private AutoCompleteTextView mSigninPhoneView;
+    private EditText mSigninPasswordView;
+
+
     private View mProgressView;
     private View mLoginFormView;
+
+    private myDbAdapter helper;
 
     private TabHost tabs;
 
@@ -65,6 +79,12 @@ public class LoginActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        if (App.getInstance().isLoggedIn()) {
+            Intent n = new Intent(LoginActivity.this, BelovedCircleActivity.class);
+            LoginActivity.this.startActivity(n);
+            finish();
+        }
         // make the title centered
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.centered_title_layout);
@@ -90,34 +110,88 @@ public class LoginActivity extends AppCompatActivity  {
 
 
 
-        // Set up the login form.
+        // Sign Up data
+        mSignupPhoneView = (AutoCompleteTextView) findViewById(R.id.signup_phone);
+        mSignupAgeView = (AutoCompleteTextView) findViewById(R.id.signup_age);
+        mSignupNameView = (AutoCompleteTextView) findViewById(R.id.signup_name);;
+        mSignupPasswordView= (EditText) findViewById(R.id.signup_password);
 
-        mPhoneView = (AutoCompleteTextView) findViewById(R.id.phone);
-        mNameView = (AutoCompleteTextView) findViewById(R.id.name);
-        mPasswordView = (EditText) findViewById(R.id.password_in);
+        // Sign In data
+        mSigninPhoneView = (AutoCompleteTextView) findViewById(R.id.signin_phone);
+        mSigninPasswordView= (EditText) findViewById(R.id.signin_password);
 
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == 1000 || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
+        mSigninButton = (Button) findViewById(R.id.signin_button);
+        mSignupButton = (Button) findViewById(R.id.signup_button);
 
-        Button mPhoneSignInButton = (Button) findViewById(R.id.phone_sign_in_button);
-        mPhoneSignInButton.setOnClickListener(new View.OnClickListener() {
+        mSigninButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
+        mSignupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptSignup();
             }
         });
 
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        helper = App.getInstance().getDbHelper();
+    }
+    private void attemptSignup() {
+        if (blockLogin) {
+            return;
+        }
+
+        blockLogin = true;
+
+        // Store values at the time of the login attempt.
+        final String phone = mSignupPhoneView.getText().toString();
+        final String name = mSignupNameView.getText().toString();
+        final String age = mSignupAgeView.getText().toString();
+        final String password = mSignupPasswordView.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        // Check for a valid phone address.
+        if (TextUtils.isEmpty(phone)) {
+            mSignupPhoneView.setError(getString(R.string.error_field_required));
+            focusView = mSignupPhoneView;
+            cancel = true;
+        } else if (!isPhoneValid(phone)) {
+            mSignupPhoneView.setError(getString(R.string.error_invalid_phone));
+            focusView = mSignupPhoneView;
+            cancel = true;
+        }
+
+        if (cancel) {
+            focusView.requestFocus();
+            blockLogin = false;
+        } else {
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+            showProgress(true);
+
+                    try {
+                        User user = new User(name,phone,password,age);
+                        user = helper.insertUser(user);
+                        Message.message(this,"user with id " + user.getId() + " Name "  + user.getName());
+                        //App.getInstance().logIn(name ,phone, password);
+
+
+                    } catch (Exception e) {
+                            Message.message(this,""+e);
+                    } finally {
+                        showProgress(false);
+                        blockLogin = false;
+                    }
+
+
+        }
     }
 
     /**
@@ -131,32 +205,30 @@ public class LoginActivity extends AppCompatActivity  {
         }
         blockLogin = true;
         // Reset errors.
-        mPhoneView.setError(null);
-        mNameView.setError(null);
-        mPasswordView.setError(null);
+        mSigninPhoneView.setError(null);
+        mSigninPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        final String name = mNameView.getText().toString();
-        final String phone = mPhoneView.getText().toString();
-        final String password = mPasswordView.getText().toString();
+        final String phone = mSigninPhoneView.getText().toString();
+        final String password = mSigninPasswordView.getText().toString();
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
+            mSigninPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mSigninPasswordView;
             cancel = true;
         }
 
         // Check for a valid phone address.
         if (TextUtils.isEmpty(phone)) {
-            mPhoneView.setError(getString(R.string.error_field_required));
-            focusView = mPhoneView;
+            mSigninPhoneView.setError(getString(R.string.error_field_required));
+            focusView = mSigninPhoneView;
             cancel = true;
         } else if (!isPhoneValid(phone)) {
-            mPhoneView.setError(getString(R.string.error_invalid_phone));
-            focusView = mPhoneView;
+            mSigninPhoneView.setError(getString(R.string.error_invalid_phone));
+            focusView = mSigninPhoneView;
             cancel = true;
         }
         if (cancel) {
@@ -166,12 +238,17 @@ public class LoginActivity extends AppCompatActivity  {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            VolleyLog.DEBUG = true;
+             User user = helper.getUser(phone);
+            if (user != null){
+                App.getInstance().logIn(user);
+                Intent n = new Intent(LoginActivity.this, BelovedCircleActivity.class);
+                LoginActivity.this.startActivity(n);
+                finish();
+            }else{
+                mSigninPhoneView.setError("INCORRECT");
+                showProgress(false);
+            }
 
-            App.getInstance().logIn(name ,phone, password);
-            Intent n = new Intent(LoginActivity.this, BelovedCircleActivity.class);
-            LoginActivity.this.startActivity(n);
-            finish();
             //App.getInstance().getRequestQueue().add(strReqLogin);
         }
     }

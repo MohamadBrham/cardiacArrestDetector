@@ -2,13 +2,20 @@ package ps.wecare.cardiacarrestdetector.db;
 
 public class User {
 
-    private int id;
+    private long id;
     private String name;
     private String phone;
     private String password;
     private String age;
 
-    public User(int id, String name, String phone, String password, String age) {
+    public User( String name, String phone, String password, String age) {
+        this.name = name;
+        this.phone = phone;
+        this.password = password;
+        this.age = age;
+    }
+
+    public User(long id, String name, String phone, String password, String age) {
         this.id = id;
         this.name = name;
         this.phone = phone;
@@ -16,7 +23,11 @@ public class User {
         this.age = age;
     }
 
-    public int getId() {
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
         return id;
     }
 

@@ -57,7 +57,7 @@
                                 android:layout_height="wrap_content">
 
                                 <AutoCompleteTextView
-                                    android:id="@+id/phone"
+                                    android:id="@+id/signin_phone"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="@string/prompt_phone"
@@ -72,7 +72,7 @@
                                 android:layout_height="wrap_content">
 
                                 <EditText
-                                    android:id="@+id/password_in"
+                                    android:id="@+id/signin_password"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="@string/prompt_password"
@@ -85,7 +85,7 @@
                             </android.support.design.widget.TextInputLayout>
 
                             <Button
-                                android:id="@+id/phone_sign_in_button"
+                                android:id="@+id/signin_button"
                                 style="?android:textAppearanceSmall"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -123,7 +123,7 @@
                                 android:layout_height="wrap_content">
 
                                 <AutoCompleteTextView
-                                    android:id="@+id/name"
+                                    android:id="@+id/signup_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="@string/prompt_name"
@@ -137,7 +137,7 @@
                                 android:layout_height="wrap_content">
 
                                 <AutoCompleteTextView
-                                    android:id="@+id/age"
+                                    android:id="@+id/signup_age"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="@string/prompt_age"
@@ -166,7 +166,7 @@
                                 android:layout_height="wrap_content">
 
                                 <EditText
-                                    android:id="@+id/password_up"
+                                    android:id="@+id/signup_password"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="@string/prompt_password"
@@ -181,7 +181,7 @@
 
 
                             <Button
-                                android:id="@+id/phone_sign_up_button"
+                                android:id="@+id/signup_button"
                                 style="?android:textAppearanceSmall"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

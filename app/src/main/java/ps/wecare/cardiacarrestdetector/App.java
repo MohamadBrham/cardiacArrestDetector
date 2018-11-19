@@ -12,12 +12,16 @@ import com.android.volley.toolbox.Volley;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import ps.wecare.cardiacarrestdetector.db.User;
+import ps.wecare.cardiacarrestdetector.db.myDbAdapter;
+
 public class App extends Application {
 
     public static final String TAG = App.class
             .getSimpleName();
 
     private RequestQueue mRequestQueue;
+    private myDbAdapter helper;
     private ImageLoader mImageLoader;
 
     private SharedPreferences mSharedPreferences;
@@ -35,6 +39,12 @@ public class App extends Application {
         return mInstance;
     }
 
+    public myDbAdapter getDbHelper() {
+        if (helper == null) {
+            helper = new myDbAdapter(this);
+        }
+        return helper;
+    }
 
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
@@ -74,6 +84,7 @@ public class App extends Application {
     public final String NAME = "NAME";
     public final String PHONE = "PhoneNumber";
     public final String PASS = "Password";
+    public final String AGE = "Age";
     public final String SHOW_GUIDE_AGAIN = "SHOW_GUIDE_AGAIN";
 
 
@@ -88,12 +99,13 @@ public class App extends Application {
         return getSharedPreferences().getString(PHONE, "");
     }
 
-    public void logIn(String name, String phone, String password) {
+    public void logIn(User user) {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
         editor.putBoolean(IS_LOGGED_IN, true);
-        editor.putString(NAME, name);
-        editor.putString(PHONE, phone);
-        editor.putString(PASS, password);
+        editor.putString(NAME, user.getName());
+        editor.putString(PHONE, user.getPhone());
+        editor.putString(PASS, user.getPassword());
+        editor.putString(AGE, user.getAge());
 
         editor.apply();
     }
@@ -107,6 +119,8 @@ public class App extends Application {
         editor.putBoolean(IS_LOGGED_IN, false);
         editor.putString(PHONE, "");
         editor.putString(PASS, "");
+        editor.putString(NAME, "");
+        editor.putString(AGE, "");
         editor.apply();
     }
 

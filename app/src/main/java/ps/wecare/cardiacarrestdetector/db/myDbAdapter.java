@@ -5,8 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
-
 
 public class myDbAdapter {
     myDbHelper myhelper;
@@ -15,16 +13,17 @@ public class myDbAdapter {
         myhelper = new myDbHelper(context);
     }
 
-    public long insertUser(String name, String pass,int age,String phone)
+    public User insertUser(User user)
     {
         SQLiteDatabase dbb = myhelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(myDbHelper.NAME, name);
-        contentValues.put(myDbHelper.PASSWORD, pass);
-        contentValues.put(myDbHelper.AGE, age);
-        contentValues.put(myDbHelper.PHONE, phone);
+        contentValues.put(myDbHelper.NAME, user.getName());
+        contentValues.put(myDbHelper.PASSWORD, user.getPassword());
+        contentValues.put(myDbHelper.AGE, user.getAge());
+        contentValues.put(myDbHelper.PHONE, user.getPhone());
         long id = dbb.insert(myDbHelper.USERS_TABLE, null , contentValues);
-        return id;
+        user.setId(id);
+        return user;
     }
 
 
@@ -166,22 +165,20 @@ public class myDbAdapter {
                 db.execSQL(MEDICATIONS_TABLE_CREATE);
                 db.execSQL(DOSES_TABLE_CREATE);
             } catch (Exception e) {
-                Toast.makeText(context, ""+e, Toast.LENGTH_SHORT).show();
-            }
+                Message.message(context,""+e);            }
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             try {
-                Toast.makeText(context, "OnUpgrade", Toast.LENGTH_SHORT).show();
+                Message.message(context,"OnUpgrade");
                 db.execSQL(DROP_TABLE_DOSES);
                 db.execSQL(DROP_TABLE_MEDICATIONS);
                 db.execSQL(DROP_TABLE_BELOVED);
                 db.execSQL(DROP_TABLE_USERS);
                 onCreate(db);
             }catch (Exception e) {
-                Toast.makeText(context, ""+e, Toast.LENGTH_SHORT).show();
-            }
+                Message.message(context,""+e);            }
         }
     }
 }

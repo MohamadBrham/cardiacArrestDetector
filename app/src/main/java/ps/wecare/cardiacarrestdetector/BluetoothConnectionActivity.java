@@ -13,9 +13,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,7 +57,14 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_bluetooth_connection);
+
         setContentView(R.layout.activity_main);
+
+        // set User name in header
+        NavigationView navView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navView.getHeaderView(0);
+        TextView navUsername = (TextView) headerView.findViewById(R.id.header_name);
+        navUsername.setText(App.getInstance().getSharedPreferences().getString(App.NAME,"Anonymous"));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -188,6 +197,7 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 

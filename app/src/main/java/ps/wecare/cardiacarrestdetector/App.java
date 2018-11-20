@@ -81,7 +81,7 @@ public class App extends Application {
 
     // Shared Preferences
     public final String IS_LOGGED_IN = "IS_LOGGED_IN";
-    public final String NAME = "NAME";
+    public static final String NAME = "NAME";
     public final String PHONE = "PhoneNumber";
     public final String PASS = "Password";
     public final String AGE = "Age";

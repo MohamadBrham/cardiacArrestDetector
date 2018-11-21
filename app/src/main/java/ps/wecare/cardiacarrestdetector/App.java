@@ -85,6 +85,7 @@ public class App extends Application {
     public final String PHONE = "PhoneNumber";
     public final String PASS = "Password";
     public final String AGE = "Age";
+    public final String ID = "id";
     public final String SHOW_GUIDE_AGAIN = "SHOW_GUIDE_AGAIN";
 
 
@@ -106,6 +107,7 @@ public class App extends Application {
         editor.putString(PHONE, user.getPhone());
         editor.putString(PASS, user.getPassword());
         editor.putString(AGE, user.getAge());
+        editor.putLong(ID, user.getId());
 
         editor.apply();
     }
@@ -128,6 +130,7 @@ public class App extends Application {
         return getSharedPreferences().getBoolean(IS_LOGGED_IN, false);
     }
     public boolean showGuide(){return getSharedPreferences().getBoolean(SHOW_GUIDE_AGAIN, true);}
+    public long getUserId(){return getSharedPreferences().getLong(ID,0);}
 
 
 

@@ -169,7 +169,7 @@ public class LoginActivity extends AppCompatActivity  {
         }
 
         if (cancel) {
-            focusView.requestFocus();
+                focusView.requestFocus();
             blockLogin = false;
         } else {
             // Show a progress spinner, and kick off a background task to

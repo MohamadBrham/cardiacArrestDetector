@@ -25,6 +25,24 @@ public class myDbAdapter {
         user.setId(id);
         return user;
     }
+    public Beloved insertBeloved(Beloved beloved)
+    {
+        SQLiteDatabase dbb = myhelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(myDbHelper.USER_ID, beloved.getUser_id());
+        contentValues.put(myDbHelper.STATUS,beloved.getStatus());
+        contentValues.put(myDbHelper.PHONE,beloved.getPhone());
+        long id = dbb.insert(myDbHelper.BELOVED_TABLE, null , contentValues);
+        beloved.setId(id);
+        return beloved;
+    }
+
+    // Beloved people table
+    private static final String BELOVED_TABLE = "beloved";   // Table Name
+    //private static final String ID="id";     // Column I (Primary Key)
+    private static final String USER_ID = "user_id";    //Column II foriegn key for uses (id)
+    //private static final String PHONE = "phone";    //Column III
+    private static final String STATUS = "status";    //Column IV
 
 
     public User getUser( String phone)

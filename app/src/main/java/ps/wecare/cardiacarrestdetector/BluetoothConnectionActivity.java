@@ -40,20 +40,22 @@ import ps.wecare.cardiacarrestdetector.db.myDbAdapter;
 
 public class BluetoothConnectionActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
 
-    final String ON = "O";
-    final String OFF = "F";
+    private final String START = "O";
 
     BluetoothSPP bluetooth;
 
     private Button connect;
-    Button on;
-    Button off;
+    private Button start;
+    private TextView guide;
 
     private static final Random RANDOM = new Random();
     private LineGraphSeries<DataPoint> series ;
 
     private int lastX = 0;
-    myDbAdapter helper;
+    private myDbAdapter helper;
+    private GraphView graph;
+    private NavigationView navigationView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,18 +65,20 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
         setContentView(R.layout.activity_main);
         helper = App.getInstance().getDbHelper();
         ArrayList<Beloved> beloved = helper.getBeloved(App.getInstance().getUserId());
-        Message.message(this,"" + beloved.size());
         if (beloved.size() == 0){
             Intent n = new Intent(BluetoothConnectionActivity.this, BelovedCircleActivity.class);
             BluetoothConnectionActivity.this.startActivity(n);
             finish();
         }
 
+        connect = (Button)findViewById(R.id.connect_btn);
+        start = (Button) findViewById(R.id.start);
+        guide = (TextView)findViewById(R.id.bluetooth_guide_area);
         // set User name in header
-        NavigationView navView = (NavigationView) findViewById(R.id.nav_view);
-        View headerView = navView.getHeaderView(0);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
         TextView navUsername = (TextView) headerView.findViewById(R.id.header_name);
-        navUsername.setText(App.getInstance().getSharedPreferences().getString(App.NAME,"Anonymous"));
+        navUsername.setText(App.getInstance().getUserName());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -95,16 +99,13 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        connect = (Button)findViewById(R.id.connect_btn);
-        on = (Button) findViewById(R.id.on);
-        off = (Button) findViewById(R.id.off);
-        off.setVisibility(View.GONE);
+
+
         // we get graph view instance
-        GraphView graph = (GraphView) findViewById(R.id.graph);
+        graph = (GraphView) findViewById(R.id.graph);
         // data
         series = new LineGraphSeries<DataPoint>();
         graph.addSeries(series);
@@ -127,14 +128,25 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
         bluetooth.setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
             public void onDeviceConnected(String name, String address) {
                 connect.setText("Connected to " + name);
+                start.setVisibility(View.VISIBLE);
+                graph.setVisibility(View.VISIBLE);
+                guide.setVisibility(View.GONE);
             }
 
             public void onDeviceDisconnected() {
                 connect.setText("Connection lost");
+                start.setVisibility(View.GONE);
+                graph.setVisibility(View.GONE);
+                guide.setVisibility(View.VISIBLE);
+
             }
 
             public void onDeviceConnectionFailed() {
                 connect.setText("Unable to connect");
+                start.setVisibility(View.GONE);
+                graph.setVisibility(View.GONE);
+                guide.setVisibility(View.VISIBLE);
+
             }
         });
         bluetooth.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
@@ -143,7 +155,7 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
                 //Toast.makeText(BluetoothConnectionActivity.this,  message , Toast.LENGTH_LONG).show();
                 //series.appendData(new DataPoint(lastX++ , Integer.parseInt(message)), true, 100);
                 series.appendData(new DataPoint(lastX++ , Double.parseDouble(message)), true, 100);
-                bluetooth.send(ON, true);
+                bluetooth.send(START, true);
             }
         });
         connect.setOnClickListener(new View.OnClickListener() {
@@ -157,20 +169,12 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
                 }
             }
         });
-        on.setOnClickListener(new View.OnClickListener() {
+        start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bluetooth.send(ON, true);
+                bluetooth.send(START, true);
             }
         });
-
-        off.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bluetooth.send(OFF, true);
-            }
-        });
-
 
     }
     @Override
@@ -201,7 +205,6 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -251,41 +254,8 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
     @Override
     protected void onResume() {
         super.onResume();
-        // we're going to simulate real time with thread that append data to the graph
-       /*
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                // we add 100 new entries
-                while(true) {
-                    runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            addEntry();
-                        }
-                    });
-
-                    // sleep to slow down the add of entries
-                    try {
-                        Thread.sleep(300);
-                    } catch (InterruptedException e) {
-                        // manage error ...
-                    }
-                }
-            }
-        }).start();
-        */
     }
-    // add random data to graph
-    private void addEntry() {
-        // here, we choose to display max 10 points on the viewport and we scroll to end
-        series.appendData(new DataPoint(lastX++ , RANDOM.nextDouble() * 10d), true, 100);
-    }
-
-
-    public void onDestroy() {
+        public void onDestroy() {
         super.onDestroy();
         bluetooth.stopService();
     }
@@ -298,9 +268,7 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
             if (resultCode == Activity.RESULT_OK) {
                 bluetooth.setupService();
             } else {
-                Toast.makeText(getApplicationContext()
-                        , "Bluetooth was not enabled."
-                        , Toast.LENGTH_SHORT).show();
+                Message.message(getApplicationContext() , "Bluetooth was not enabled.");
                 finish();
             }
         }

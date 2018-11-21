@@ -43,7 +43,7 @@
                 android:id="@+id/phone_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Beloved person phone"
+                android:hint="@string/beloved_phone_input"
                 android:inputType="phone"
                 android:maxLines="1"
                 android:singleLine="true" />
@@ -58,7 +58,7 @@
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Beloved person name"
+                android:hint="@string/beloved_name_input"
                 android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true" />

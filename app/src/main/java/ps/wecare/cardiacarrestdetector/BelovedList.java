@@ -33,13 +33,12 @@ public class BelovedList extends AppCompatActivity {
 
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.centered_title_layout);
-        ((TextView)getSupportActionBar().getCustomView().findViewById(R.id.tvTitle)).setText(R.string.app_name);
+        ((TextView)getSupportActionBar().getCustomView().findViewById(R.id.tvTitle)).setText(R.string.beloved_circle_list_title);
 
         belovedList = (ListView) findViewById(R.id.beloved_list);
 
         helper = App.getInstance().getDbHelper();
         beloved = helper.getBeloved(App.getInstance().getUserId());
-
 
         // Defined Array values to show in ListView
         values = new ArrayList<>();
@@ -84,8 +83,8 @@ public class BelovedList extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent n = new Intent(BelovedList.this, BelovedCircleActivity.class);
+                n.putExtra("NEW","NEW");
                 BelovedList.this.startActivity(n);
-                finish();
             }
         });
 

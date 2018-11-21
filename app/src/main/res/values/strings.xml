@@ -44,7 +44,19 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-    <string name="beloved_circle_title">Beloved Circle Settings</string>
+
+
+    # bluetooth connection
+    <string name="start">START</string>
+
+    # Beloved
+    <string name="add_beloved_btn">ADD NEW BELOVED</string>
+    <string name="nav_beloved_circle_title">Beloved Circle Settings</string>
+    <string name="beloved_circle_update_title">UPDATE Beloved Person</string>
+    <string name="beloved_circle_new_title">ADD Beloved Person</string>
+    <string name="beloved_circle_list_title">My Beloved Circle</string>
+    <string name="beloved_phone_input">Beloved Person Phone</string>
+    <string name="beloved_name_input">Beloved Person Name</string>
 
 
 </resources>

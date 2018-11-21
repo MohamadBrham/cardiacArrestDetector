@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Cardiac Arrest Detector</string>
+    <string name="app_name">الصفحة الرئيسية</string>
 
     <!-- Strings related to language -->
     <string name="action_arabic">العربية</string>
@@ -42,14 +42,29 @@
 
 
 
-    <string name="bluetooth_guide_area">This is our BLutooth connection Guide</string>
-    <string name="beloved_guide">Beloved circle is refere to the pepole you wish us to contact when there is something regarding your health</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">الإعدادات</string>
-    <string name="beloved_circle_title">الأشخاص المقربون</string>
+
+
+
+
+    # bluetooth connection
+    <string name="start">ابدأ</string>
+    <string name="bluetooth_guide_area">هذا دليل الاتصال بالبلوتوث</string>
+    # Maintain Beloved
+    <string name="beloved_guide">دائرة الأشخاص المقربون تضم الأشخاص الذين يتم الاتصال بهم في حالة الطوارئ</string>
+    <string name="nav_beloved_circle_title">الأشخاص المقربون</string>
+    <string name="add_beloved_btn">أضف شخص مقرّب جديد</string>
+    <string name="beloved_circle_update_title">تحديث المعلومات</string>
+    <string name="beloved_circle_new_title">إضافة شخص مقرب</string>
+    <string name="beloved_circle_list_title">الأشخاص المقربون</string>
+    <string name="beloved_phone_input">رقم الهاتف</string>
+    <string name="beloved_name_input">الاسم</string>
+
 
 </resources>

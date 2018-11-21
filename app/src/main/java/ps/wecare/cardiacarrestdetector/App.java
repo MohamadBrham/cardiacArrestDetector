@@ -81,7 +81,7 @@ public class App extends Application {
 
     // Shared Preferences
     public final String IS_LOGGED_IN = "IS_LOGGED_IN";
-    public static final String NAME = "NAME";
+    public final String NAME = "NAME";
     public final String PHONE = "PhoneNumber";
     public final String PASS = "Password";
     public final String AGE = "Age";
@@ -131,6 +131,7 @@ public class App extends Application {
     }
     public boolean showGuide(){return getSharedPreferences().getBoolean(SHOW_GUIDE_AGAIN, true);}
     public long getUserId(){return getSharedPreferences().getLong(ID,0);}
+    public String getUserName(){return getSharedPreferences().getString(NAME,"Anonymous");}
 
 
 

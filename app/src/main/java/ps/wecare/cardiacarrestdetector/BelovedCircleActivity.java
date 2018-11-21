@@ -23,29 +23,25 @@ public class BelovedCircleActivity extends AppCompatActivity {
     private AutoCompleteTextView mBelovedPhoneView;
     private boolean cancel;
     private myDbAdapter helper;
+    private boolean internal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beloved_circle);
+        internal = false;
         // make the title centered
+        if (getIntent().getStringExtra("NEW") != null)
+            internal = true;
         helper = App.getInstance().getDbHelper();
-//        ArrayList<Beloved> beloved = helper.getBeloved(App.getInstance().getUserId());
-//        Message.message(this,"" + beloved.size());
-//        if (beloved.size() > 0){
-//            Intent n = new Intent(BelovedCircleActivity.this, BluetoothConnectionActivity.class);
-//            BelovedCircleActivity.this.startActivity(n);
-//            finish();
-//
-//        }
 
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.centered_title_layout);
-        ((TextView)getSupportActionBar().getCustomView().findViewById(R.id.tvTitle)).setText(R.string.app_name);
+        ((TextView)getSupportActionBar().getCustomView().findViewById(R.id.tvTitle)).setText(R.string.beloved_circle_new_title);
+
 
         submit_btn = (Button) findViewById(R.id.submit_btn);
         cancel = false;
         mBelovedPhoneView = (AutoCompleteTextView) findViewById(R.id.phone_1);
-
 
         helper = App.getInstance().getDbHelper();
         submit_btn.setOnClickListener(new View.OnClickListener() {
@@ -54,10 +50,11 @@ public class BelovedCircleActivity extends AppCompatActivity {
 
                 insertBeloved(mBelovedPhoneView);
 
-
                 if (! cancel) {
-                    Intent n = new Intent(BelovedCircleActivity.this, BluetoothConnectionActivity.class);
-                    BelovedCircleActivity.this.startActivity(n);
+                    if(!internal) {
+                        Intent n = new Intent(BelovedCircleActivity.this, BluetoothConnectionActivity.class);
+                        BelovedCircleActivity.this.startActivity(n);
+                    }
                     finish();
                 }
             }
@@ -81,7 +78,6 @@ public class BelovedCircleActivity extends AppCompatActivity {
         }else{
             Beloved beloved = new Beloved(App.getInstance().getUserId(),phone1,"Available");
             beloved = helper.insertBeloved(beloved);
-            Message.message(this,"user with id " + beloved.getId() + " Name "  + beloved.getStatus());
         }
     }
 }

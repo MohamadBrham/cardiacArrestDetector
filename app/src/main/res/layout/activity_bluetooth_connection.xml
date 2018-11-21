@@ -48,28 +48,21 @@
             android:text="@string/action_connect_bluetooth"
             android:textStyle="bold" />
         <Button
-            android:id="@+id/off"
+            android:id="@+id/start"
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
-            android:text="OFF"
-            android:textStyle="bold" />
-        <Button
-            android:id="@+id/on"
-            style="?android:textAppearanceSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_weight="1"
-            android:text="ON"
-            android:textStyle="bold" />
+            android:text="@string/start"
+            android:textStyle="bold"
+            android:visibility="gone"/>
 
         <com.jjoe64.graphview.GraphView
             android:id="@+id/graph"
             android:layout_width="match_parent"
-            android:layout_height="300dp" />
+            android:layout_height="300dp"
+            android:visibility="gone"/>
 
 
 

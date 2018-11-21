@@ -1,11 +1,13 @@
 package ps.wecare.cardiacarrestdetector;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.TextView;
 
 import ps.wecare.cardiacarrestdetector.db.Message;
 import ps.wecare.cardiacarrestdetector.db.myDbAdapter;
@@ -23,6 +25,10 @@ public class UpdateBeloved extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beloved_circle);
+
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.centered_title_layout);
+        ((TextView)getSupportActionBar().getCustomView().findViewById(R.id.tvTitle)).setText(R.string.beloved_circle_update_title);
 
         helper = App.getInstance().getDbHelper();
         id = getIntent().getStringExtra("Id");

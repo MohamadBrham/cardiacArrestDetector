@@ -14,7 +14,7 @@ public class Beloved {
         this.phone = phone;
         this.status = status;
     }
-    public Beloved(long id, int user_id, String phone, String status) {
+    public Beloved(long id, long user_id, String phone, String status) {
         this.id = id;
         this.user_id = user_id;
         this.phone = phone;

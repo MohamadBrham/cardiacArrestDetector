@@ -17,7 +17,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login" />
         <activity
             android:name=".LanguageActivity"
             android:configChanges="locale"
@@ -30,20 +30,15 @@
         </activity>
         <activity
             android:name=".GuideActivity"
-            android:configChanges="locale"></activity>
+            android:configChanges="locale" />
         <activity
             android:name=".BelovedCircleActivity"
             android:label="@string/title_activity_beloved" />
-
-        <activity android:name=".BluetoothConnectionActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-
         <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:name=".BluetoothConnectionActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".BelovedList" />
+        <activity android:name=".UpdateBeloved"></activity>
     </application>
 
 </manifest>

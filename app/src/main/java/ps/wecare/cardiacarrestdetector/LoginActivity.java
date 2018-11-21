@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_login);
 
         if (App.getInstance().isLoggedIn()) {
-            Intent n = new Intent(LoginActivity.this, BelovedCircleActivity.class);
+            Intent n = new Intent(LoginActivity.this, BluetoothConnectionActivity.class);
             LoginActivity.this.startActivity(n);
             finish();
         }

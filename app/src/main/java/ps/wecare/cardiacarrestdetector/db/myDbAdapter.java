@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 public class myDbAdapter {
     myDbHelper myhelper;
     public myDbAdapter(Context context)
@@ -36,14 +38,45 @@ public class myDbAdapter {
         beloved.setId(id);
         return beloved;
     }
+    public ArrayList<Beloved> getBeloved(long user_id)
+    {
+        ArrayList<Beloved> beloved = new ArrayList<Beloved>();
+        SQLiteDatabase db = myhelper.getWritableDatabase();
+        String[] columns = {myDbHelper.ID,myDbHelper.USER_ID,myDbHelper.PHONE,myDbHelper.STATUS };
+        String whereClause = myDbHelper.USER_ID +" = ? ";
+        String[] whereArgs = new String[] {""+user_id};
+        Cursor cursor = db.query(myDbHelper.BELOVED_TABLE,columns,whereClause,whereArgs,null,null,null);
+        if(cursor != null)
+        {
+            while (cursor.moveToNext())
+            {
+                long id = cursor.getLong(cursor.getColumnIndex(myDbHelper.ID));
+                long uid = cursor.getLong(cursor.getColumnIndex(myDbHelper.USER_ID));
+                String phone = cursor.getString(cursor.getColumnIndex(myDbHelper.PHONE));
+                String  status =cursor.getString(cursor.getColumnIndex(myDbHelper.STATUS));
+                beloved.add(new Beloved(id,user_id,phone,status));
+            }
+            cursor.close();
+        }
+        return beloved;
+    }
+    public int deleteBeloved(long id){
+        SQLiteDatabase db = myhelper.getWritableDatabase();
+        String[] whereArgs ={""+id};
+        int count = db.delete(myDbHelper.BELOVED_TABLE ,myDbHelper.ID+" = ?",whereArgs);
+        return  count;
+    }
+    public int updateBeloved(int id , String name, String phone){
 
-    // Beloved people table
-    private static final String BELOVED_TABLE = "beloved";   // Table Name
-    //private static final String ID="id";     // Column I (Primary Key)
-    private static final String USER_ID = "user_id";    //Column II foriegn key for uses (id)
-    //private static final String PHONE = "phone";    //Column III
-    private static final String STATUS = "status";    //Column IV
+            SQLiteDatabase db = myhelper.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(myDbHelper.PHONE,phone);
+            String[] whereArgs= {""+id};
+            int count = db.update(myDbHelper.BELOVED_TABLE,contentValues, myDbHelper.ID+" = ?",whereArgs );
+            return count;
 
+
+    }
 
     public User getUser( String phone)
     {
@@ -53,7 +86,6 @@ public class myDbAdapter {
         String whereClause = myDbHelper.PHONE +" = ? ";
         String[] whereArgs = new String[] {phone};
         Cursor cursor = db.query(myDbHelper.USERS_TABLE,columns,whereClause,whereArgs,null,null,null);
-
         if(cursor != null)
         {
             if (cursor.moveToFirst()) {
@@ -117,7 +149,7 @@ public class myDbAdapter {
         private static final String START = "start_date";    //Column III
         private static final String END = "end_date";    //Column IV
 
-        // medication times table
+        // doses table
         private static final String DOSES_TABLE = "doses";   // Table Name
         //private static final String ID="id";     // Column I (Primary Key)
         private static final String MEDICATION_ID = "medication_id";    //Column II foreign key for medications (id)

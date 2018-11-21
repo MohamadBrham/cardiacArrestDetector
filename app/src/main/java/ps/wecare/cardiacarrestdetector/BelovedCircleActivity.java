@@ -10,6 +10,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import ps.wecare.cardiacarrestdetector.db.Beloved;
 import ps.wecare.cardiacarrestdetector.db.Message;
 import ps.wecare.cardiacarrestdetector.db.User;
@@ -19,7 +21,6 @@ public class BelovedCircleActivity extends AppCompatActivity {
 
     private Button submit_btn;
     private AutoCompleteTextView mBelovedPhoneView;
-    private AutoCompleteTextView mBeloved2PhoneView;
     private boolean cancel;
     private myDbAdapter helper;
     @Override
@@ -27,6 +28,16 @@ public class BelovedCircleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beloved_circle);
         // make the title centered
+        helper = App.getInstance().getDbHelper();
+//        ArrayList<Beloved> beloved = helper.getBeloved(App.getInstance().getUserId());
+//        Message.message(this,"" + beloved.size());
+//        if (beloved.size() > 0){
+//            Intent n = new Intent(BelovedCircleActivity.this, BluetoothConnectionActivity.class);
+//            BelovedCircleActivity.this.startActivity(n);
+//            finish();
+//
+//        }
+
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.centered_title_layout);
         ((TextView)getSupportActionBar().getCustomView().findViewById(R.id.tvTitle)).setText(R.string.app_name);
@@ -34,7 +45,6 @@ public class BelovedCircleActivity extends AppCompatActivity {
         submit_btn = (Button) findViewById(R.id.submit_btn);
         cancel = false;
         mBelovedPhoneView = (AutoCompleteTextView) findViewById(R.id.phone_1);
-        mBeloved2PhoneView = (AutoCompleteTextView) findViewById(R.id.phone_2);
 
 
         helper = App.getInstance().getDbHelper();
@@ -43,7 +53,6 @@ public class BelovedCircleActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 insertBeloved(mBelovedPhoneView);
-                //insertBeloved(mBeloved2PhoneView);
 
 
                 if (! cancel) {
@@ -74,7 +83,5 @@ public class BelovedCircleActivity extends AppCompatActivity {
             beloved = helper.insertBeloved(beloved);
             Message.message(this,"user with id " + beloved.getId() + " Name "  + beloved.getStatus());
         }
-
-
     }
 }

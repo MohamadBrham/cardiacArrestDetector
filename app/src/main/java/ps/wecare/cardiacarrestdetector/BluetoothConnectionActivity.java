@@ -27,11 +27,13 @@ import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
+import ps.wecare.cardiacarrestdetector.db.Beloved;
 import ps.wecare.cardiacarrestdetector.db.Message;
 import ps.wecare.cardiacarrestdetector.db.myDbAdapter;
 
@@ -51,7 +53,7 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
     private LineGraphSeries<DataPoint> series ;
 
     private int lastX = 0;
-
+    myDbAdapter helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,14 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
         //setContentView(R.layout.activity_bluetooth_connection);
 
         setContentView(R.layout.activity_main);
+        helper = App.getInstance().getDbHelper();
+        ArrayList<Beloved> beloved = helper.getBeloved(App.getInstance().getUserId());
+        Message.message(this,"" + beloved.size());
+        if (beloved.size() == 0){
+            Intent n = new Intent(BluetoothConnectionActivity.this, BelovedCircleActivity.class);
+            BluetoothConnectionActivity.this.startActivity(n);
+            finish();
+        }
 
         // set User name in header
         NavigationView navView = (NavigationView) findViewById(R.id.nav_view);
@@ -92,6 +102,7 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
         connect = (Button)findViewById(R.id.connect_btn);
         on = (Button) findViewById(R.id.on);
         off = (Button) findViewById(R.id.off);
+        off.setVisibility(View.GONE);
         // we get graph view instance
         GraphView graph = (GraphView) findViewById(R.id.graph);
         // data
@@ -203,8 +214,9 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
+        } else if (id == R.id.nav_beloved_list) {
+            Intent n = new Intent(BluetoothConnectionActivity.this, BelovedList.class);
+            BluetoothConnectionActivity.this.startActivity(n);
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {

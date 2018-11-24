@@ -34,6 +34,7 @@ public class myDbAdapter {
         contentValues.put(myDbHelper.USER_ID, beloved.getUser_id());
         contentValues.put(myDbHelper.STATUS,beloved.getStatus());
         contentValues.put(myDbHelper.PHONE,beloved.getPhone());
+        contentValues.put(myDbHelper.NAME,beloved.getName());
         long id = dbb.insert(myDbHelper.BELOVED_TABLE, null , contentValues);
         beloved.setId(id);
         return beloved;
@@ -42,7 +43,7 @@ public class myDbAdapter {
     {
         ArrayList<Beloved> beloved = new ArrayList<Beloved>();
         SQLiteDatabase db = myhelper.getWritableDatabase();
-        String[] columns = {myDbHelper.ID,myDbHelper.USER_ID,myDbHelper.PHONE,myDbHelper.STATUS };
+        String[] columns = {myDbHelper.ID,myDbHelper.USER_ID,myDbHelper.PHONE,myDbHelper.STATUS ,myDbHelper.NAME};
         String whereClause = myDbHelper.USER_ID +" = ? ";
         String[] whereArgs = new String[] {""+user_id};
         Cursor cursor = db.query(myDbHelper.BELOVED_TABLE,columns,whereClause,whereArgs,null,null,null);
@@ -54,7 +55,8 @@ public class myDbAdapter {
                 long uid = cursor.getLong(cursor.getColumnIndex(myDbHelper.USER_ID));
                 String phone = cursor.getString(cursor.getColumnIndex(myDbHelper.PHONE));
                 String  status =cursor.getString(cursor.getColumnIndex(myDbHelper.STATUS));
-                beloved.add(new Beloved(id,user_id,phone,status));
+                String  name = cursor.getString(cursor.getColumnIndex(myDbHelper.NAME));
+                beloved.add(new Beloved(id,user_id,phone,name,status));
             }
             cursor.close();
         }
@@ -71,6 +73,7 @@ public class myDbAdapter {
             SQLiteDatabase db = myhelper.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             contentValues.put(myDbHelper.PHONE,phone);
+            contentValues.put(myDbHelper.NAME,name);
             String[] whereArgs= {""+id};
             int count = db.update(myDbHelper.BELOVED_TABLE,contentValues, myDbHelper.ID+" = ?",whereArgs );
             return count;
@@ -125,7 +128,7 @@ public class myDbAdapter {
     static class myDbHelper extends SQLiteOpenHelper
     {
         private static final String DATABASE_NAME = "myDatabase";    // Database
-        private static final int DATABASE_Version = 1;    // Database Version
+        private static final int DATABASE_Version = 4;    // Database Version
 
         // Users Table
         private static final String USERS_TABLE = "users";   // Table Name
@@ -139,8 +142,9 @@ public class myDbAdapter {
         private static final String BELOVED_TABLE = "beloved";   // Table Name
         //private static final String ID="id";     // Column I (Primary Key)
         private static final String USER_ID = "user_id";    //Column II foriegn key for uses (id)
-        //private static final String PHONE = "phone";    //Column III
-        private static final String STATUS = "status";    //Column IV
+        //private static final String NAME = "name";    //Column III
+        //private static final String PHONE = "phone";    //Column IV
+        private static final String STATUS = "status";    //Column V
 
         // medication times table
         private static final String MEDICATIONS_TABLE = "medications";   // Table Name
@@ -172,6 +176,7 @@ public class myDbAdapter {
                 + ID + " integer primary key autoincrement, "
                 + USER_ID + " integer not null, "
                 + PHONE + " text not null, "
+                + NAME + " text not null, "
                 + STATUS + " text not null,"
                 + " FOREIGN KEY ("+USER_ID+") REFERENCES "+USERS_TABLE+"("+ID+"));";
         private static final String MEDICATIONS_TABLE_CREATE = "create table "

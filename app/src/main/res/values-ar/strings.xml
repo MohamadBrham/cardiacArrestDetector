@@ -67,4 +67,7 @@
     <string name="beloved_name_input">الاسم</string>
 
 
+    # Medications
+    <string name="nav_medications_title">الأدوية</string>
+
 </resources>

@@ -4,21 +4,28 @@ public class Beloved {
     private long id;
     private long user_id;
     private String phone;
+    private String name;
     private String status;
 
     public void setId(long id) {
         this.id = id;
     }
-    public Beloved( long user_id, String phone, String status) {
+
+    public Beloved( long user_id, String phone,String name, String status) {
         this.user_id = user_id;
         this.phone = phone;
         this.status = status;
+        this.name = name;
     }
-    public Beloved(long id, long user_id, String phone, String status) {
+    public Beloved(long id, long user_id, String phone,String name, String status) {
         this.id = id;
         this.user_id = user_id;
         this.phone = phone;
         this.status = status;
+        this.name = name;
+    }
+    public String getName() {
+        return name;
     }
 
     public long getId() {

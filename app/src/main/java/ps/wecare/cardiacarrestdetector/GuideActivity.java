@@ -21,11 +21,6 @@ public class GuideActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!App.getInstance().showGuide()) {
-            Intent n = new Intent(GuideActivity.this, LoginActivity.class);
-            GuideActivity.this.startActivity(n);
-            finish();
-        }
         setContentView(R.layout.activity_guide);
         // make the title centered
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -41,7 +36,7 @@ public class GuideActivity extends AppCompatActivity {
                 if (dontshowAgain){
                     App.getInstance().setWithoutGuide();
                 }
-                Intent n = new Intent(GuideActivity.this,LoginActivity.class);
+                Intent n = new Intent(GuideActivity.this,BluetoothConnectionActivity.class);
                 GuideActivity.this.startActivity(n);
                 finish();
             }

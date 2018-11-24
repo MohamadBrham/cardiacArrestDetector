@@ -80,11 +80,6 @@ public class LoginActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if (App.getInstance().isLoggedIn()) {
-            Intent n = new Intent(LoginActivity.this, BluetoothConnectionActivity.class);
-            LoginActivity.this.startActivity(n);
-            finish();
-        }
         // make the title centered
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.centered_title_layout);
@@ -241,7 +236,7 @@ public class LoginActivity extends AppCompatActivity  {
              User user = helper.getUser(phone);
             if (user != null){
                 App.getInstance().logIn(user);
-                Intent n = new Intent(LoginActivity.this, BelovedCircleActivity.class);
+                Intent n = new Intent(LoginActivity.this, BluetoothConnectionActivity.class);
                 LoginActivity.this.startActivity(n);
                 finish();
             }else{

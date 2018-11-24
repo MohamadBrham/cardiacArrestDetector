@@ -13,9 +13,9 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/nav_beloved_circle_title" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_medications_list"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"

@@ -33,6 +33,8 @@ import java.util.Random;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
+import ps.wecare.cardiacarrestdetector.Beloved.BelovedCircleActivity;
+import ps.wecare.cardiacarrestdetector.Beloved.BelovedList;
 import ps.wecare.cardiacarrestdetector.db.Beloved;
 import ps.wecare.cardiacarrestdetector.db.Message;
 import ps.wecare.cardiacarrestdetector.db.myDbAdapter;
@@ -61,8 +63,18 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_bluetooth_connection);
+        if (App.getInstance().showGuide()) {
+            Intent n = new Intent(BluetoothConnectionActivity.this, GuideActivity.class);
+            BluetoothConnectionActivity.this.startActivity(n);
+            finish();
+        }
 
-        setContentView(R.layout.activity_main);
+        if (!App.getInstance().isLoggedIn()) {
+            Intent n = new Intent(BluetoothConnectionActivity.this, LoginActivity.class);
+            BluetoothConnectionActivity.this.startActivity(n);
+            finish();
+        }
+
         helper = App.getInstance().getDbHelper();
         ArrayList<Beloved> beloved = helper.getBeloved(App.getInstance().getUserId());
         if (beloved.size() == 0){
@@ -70,6 +82,9 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
             BluetoothConnectionActivity.this.startActivity(n);
             finish();
         }
+
+        setContentView(R.layout.activity_main);
+
 
         connect = (Button)findViewById(R.id.connect_btn);
         start = (Button) findViewById(R.id.start);
@@ -220,7 +235,7 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
         } else if (id == R.id.nav_beloved_list) {
             Intent n = new Intent(BluetoothConnectionActivity.this, BelovedList.class);
             BluetoothConnectionActivity.this.startActivity(n);
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_medications_list) {
 
         } else if (id == R.id.nav_manage) {
 

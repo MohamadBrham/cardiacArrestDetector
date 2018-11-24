@@ -32,13 +32,13 @@
             android:name=".GuideActivity"
             android:configChanges="locale" />
         <activity
-            android:name=".BelovedCircleActivity"
+            android:name=".Beloved.BelovedCircleActivity"
             android:label="@string/title_activity_beloved" />
         <activity
             android:name=".BluetoothConnectionActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".BelovedList" />
-        <activity android:name=".UpdateBeloved"></activity>
+        <activity android:name=".Beloved.BelovedList" />
+        <activity android:name=".Beloved.UpdateBeloved"></activity>
     </application>
 
 </manifest>

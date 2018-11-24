@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import java.util.Locale;
 
+import ps.wecare.cardiacarrestdetector.db.Message;
+
 public class LanguageActivity extends AppCompatActivity {
 
     private Button arabic_btn;
@@ -29,6 +31,14 @@ public class LanguageActivity extends AppCompatActivity {
         arabic_btn = (Button) findViewById(R.id.arabic_btn);
         english_btn = (Button) findViewById(R.id.english_btn);
 
+
+        if (App.getInstance().isLoggedIn()){
+            Message.message(this,"Logged In ");
+        }else {
+            Message.message(this,"Not yet ");
+
+        }
+
         arabic_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -39,7 +49,7 @@ public class LanguageActivity extends AppCompatActivity {
                 Resources resources = getResources();
                 resources.updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
 
-                Intent n = new Intent(LanguageActivity.this, GuideActivity.class);
+                Intent n = new Intent(LanguageActivity.this, BluetoothConnectionActivity.class);
                 LanguageActivity.this.startActivity(n);
                 //finish();
             }
@@ -54,7 +64,7 @@ public class LanguageActivity extends AppCompatActivity {
                 config.setLocale(locale);
                 Resources resources = getResources();
                 resources.updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
-                Intent n = new Intent(LanguageActivity.this, GuideActivity.class);
+                Intent n = new Intent(LanguageActivity.this, BluetoothConnectionActivity.class);
                 LanguageActivity.this.startActivity(n);
                //finish();
             }

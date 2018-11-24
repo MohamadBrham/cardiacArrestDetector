@@ -129,6 +129,7 @@ public class App extends Application {
     public boolean isLoggedIn() {
         return getSharedPreferences().getBoolean(IS_LOGGED_IN, false);
     }
+
     public boolean showGuide(){return getSharedPreferences().getBoolean(SHOW_GUIDE_AGAIN, true);}
     public long getUserId(){return getSharedPreferences().getLong(ID,0);}
     public String getUserName(){return getSharedPreferences().getString(NAME,"Anonymous");}

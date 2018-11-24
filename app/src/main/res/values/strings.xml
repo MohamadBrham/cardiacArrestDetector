@@ -58,5 +58,9 @@
     <string name="beloved_phone_input">Beloved Person Phone</string>
     <string name="beloved_name_input">Beloved Person Name</string>
 
+    # Medications
+    <string name="nav_medications_title">Medications</string>
+
+
 
 </resources>

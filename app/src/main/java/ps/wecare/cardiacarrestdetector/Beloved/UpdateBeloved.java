@@ -1,6 +1,5 @@
-package ps.wecare.cardiacarrestdetector;
+package ps.wecare.cardiacarrestdetector.Beloved;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,18 +8,19 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 
-import ps.wecare.cardiacarrestdetector.db.Message;
+import ps.wecare.cardiacarrestdetector.App;
+import ps.wecare.cardiacarrestdetector.R;
 import ps.wecare.cardiacarrestdetector.db.myDbAdapter;
 
 public class UpdateBeloved extends AppCompatActivity {
 
-    Button update;
-    Button delete;
-    AutoCompleteTextView phone;
+    private Button update;
+    private Button delete;
+    private AutoCompleteTextView phone;
     private AutoCompleteTextView name;
     private myDbAdapter helper;
-
     private String id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,11 +43,12 @@ public class UpdateBeloved extends AppCompatActivity {
         name = (AutoCompleteTextView) findViewById(R.id.name);
 
         phone.setText(getIntent().getStringExtra("phone"));
+        name.setText(getIntent().getStringExtra("name"));
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                helper.updateBeloved(Integer.parseInt(id),"",phone.getText().toString());
+                helper.updateBeloved(Integer.parseInt(id),name.getText().toString(),phone.getText().toString());
                 finish();
             }
         });

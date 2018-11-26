@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import ps.wecare.cardiacarrestdetector.App;
 import ps.wecare.cardiacarrestdetector.R;
+import ps.wecare.cardiacarrestdetector.db.Beloved;
 import ps.wecare.cardiacarrestdetector.db.myDbAdapter;
 
 public class UpdateBeloved extends AppCompatActivity {
@@ -48,7 +49,7 @@ public class UpdateBeloved extends AppCompatActivity {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                helper.updateBeloved(Integer.parseInt(id),name.getText().toString(),phone.getText().toString());
+                helper.updateBeloved(new Beloved(Integer.parseInt(id),App.getInstance().getUserId(),phone.getText().toString(),name.getText().toString()    ,"Available"));
                 finish();
             }
         });

@@ -10,17 +10,14 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import ps.wecare.cardiacarrestdetector.App;
 import ps.wecare.cardiacarrestdetector.BluetoothConnectionActivity;
 import ps.wecare.cardiacarrestdetector.R;
 import ps.wecare.cardiacarrestdetector.db.Beloved;
 import ps.wecare.cardiacarrestdetector.db.Message;
-import ps.wecare.cardiacarrestdetector.db.User;
 import ps.wecare.cardiacarrestdetector.db.myDbAdapter;
 
-public class BelovedCircleActivity extends AppCompatActivity {
+public class AddBeloved extends AppCompatActivity {
 
     private Button submit_btn;
     private AutoCompleteTextView mBelovedPhoneView;
@@ -55,11 +52,12 @@ public class BelovedCircleActivity extends AppCompatActivity {
 
                 if (! cancel) {
                     if(!internal) {
-                        Intent n = new Intent(BelovedCircleActivity.this, BluetoothConnectionActivity.class);
-                        BelovedCircleActivity.this.startActivity(n);
+                        Intent n = new Intent(AddBeloved.this, BluetoothConnectionActivity.class);
+                        AddBeloved.this.startActivity(n);
                     }
                     finish();
                 }
+                cancel = false;
             }
         });
     }

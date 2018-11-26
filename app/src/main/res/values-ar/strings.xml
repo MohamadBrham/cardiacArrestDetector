@@ -38,6 +38,7 @@
     <string name="guide">هذا دليل الاستخدام</string>
     <string name="chk_btn_dontshow">عدم الإظهار مرة أخرى</string>
 
+
     <string name="btn_next">التالي</string>
 
 
@@ -58,7 +59,6 @@
     <string name="bluetooth_guide_area">هذا دليل الاتصال بالبلوتوث</string>
     # Maintain Beloved
     <string name="beloved_guide">دائرة الأشخاص المقربون تضم الأشخاص الذين يتم الاتصال بهم في حالة الطوارئ</string>
-    <string name="nav_beloved_circle_title">الأشخاص المقربون</string>
     <string name="add_beloved_btn">أضف شخص مقرّب جديد</string>
     <string name="beloved_circle_update_title">تحديث المعلومات</string>
     <string name="beloved_circle_new_title">إضافة شخص مقرب</string>
@@ -67,7 +67,24 @@
     <string name="beloved_name_input">الاسم</string>
 
 
-    # Medications
+    # nav
     <string name="nav_medications_title">الأدوية</string>
+    <string name="nav_logout">تسجيل الخروج</string>
+    <string name="nav_beloved_circle_title">الأشخاص المقربون</string>
+
+    # Medications
+    <string name="medication_guide"> هذا دليل الأدوية التي يتناولها المستخدم</string>
+
+    <string name="first_medication_date"> تاريخ البدء بتناول الدواء</string>
+    <string name="last_medication_date">تاريخ الانتهاء من الدواء</string>
+
+    <string name="medication_name"> اسم الدواء</string>
+    <string name="add_medication_btn"> أضافة دواء جديد</string>
+    <string name="medications_list_title">أدويتي</string>
+    <string name="update_medication_title">تعديل الدواء</string>
+
+
+
+
 
 </resources>

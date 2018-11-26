@@ -46,6 +46,10 @@
     <string name="action_settings">Settings</string>
 
 
+    # nav
+    <string name="nav_logout">Logout</string>
+
+
     # bluetooth connection
     <string name="start">START</string>
 
@@ -60,7 +64,13 @@
 
     # Medications
     <string name="nav_medications_title">Medications</string>
-
+    <string name="medication_guide"> This is the Medication Guide Area</string>
+    <string name="first_medication_date"> The First Medication Date</string>
+    <string name="last_medication_date"> The Last Medication Date</string>
+    <string name="medication_name"> Medication Name</string>
+    <string name="add_medication_btn"> Add new Medication</string>
+    <string name="medications_list_title">My Medications</string>
+    <string name="update_medication_title">Update Medication</string>
 
 
 </resources>

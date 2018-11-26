@@ -2,23 +2,40 @@ package ps.wecare.cardiacarrestdetector.db;
 
 public class Medication {
 
-    private int id;
-    private int user_id;
+    private long id;
+    private long user_id;
+    private String name;
     private String start;
     private String end;
 
-    public Medication(int id, int user_id, String start, String end) {
+    public Medication(long id, long user_id, String name, String start, String end) {
         this.id = id;
+        this.name = name;
         this.user_id = user_id;
         this.start = start;
         this.end = end;
     }
 
-    public int getId() {
+    public Medication(long user_id, String name, String start, String end) {
+        this.user_id = user_id;
+        this.name = name;
+        this.start = start;
+        this.end = end;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public int getUser_id() {
+    public long getUser_id() {
         return user_id;
     }
 

@@ -3,21 +3,20 @@ package ps.wecare.cardiacarrestdetector;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,13 +27,16 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
-import ps.wecare.cardiacarrestdetector.Beloved.BelovedCircleActivity;
+import ps.wecare.cardiacarrestdetector.Beloved.AddBeloved;
 import ps.wecare.cardiacarrestdetector.Beloved.BelovedList;
+import ps.wecare.cardiacarrestdetector.Medications.AddMedication;
+import ps.wecare.cardiacarrestdetector.Medications.MedicationsList;
 import ps.wecare.cardiacarrestdetector.db.Beloved;
 import ps.wecare.cardiacarrestdetector.db.Message;
 import ps.wecare.cardiacarrestdetector.db.myDbAdapter;
@@ -78,7 +80,7 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
         helper = App.getInstance().getDbHelper();
         ArrayList<Beloved> beloved = helper.getBeloved(App.getInstance().getUserId());
         if (beloved.size() == 0){
-            Intent n = new Intent(BluetoothConnectionActivity.this, BelovedCircleActivity.class);
+            Intent n = new Intent(BluetoothConnectionActivity.this, AddBeloved.class);
             BluetoothConnectionActivity.this.startActivity(n);
             finish();
         }
@@ -230,23 +232,38 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_beloved_list) {
+        if (id == R.id.nav_beloved_list) {
             Intent n = new Intent(BluetoothConnectionActivity.this, BelovedList.class);
             BluetoothConnectionActivity.this.startActivity(n);
         } else if (id == R.id.nav_medications_list) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            Intent n = new Intent(BluetoothConnectionActivity.this, MedicationsList.class);
+            BluetoothConnectionActivity.this.startActivity(n);
         }else if (id == R.id.nav_logout) {
             Message.message(this,"Logout");
             App.getInstance().logOut();
             Intent n = new Intent(BluetoothConnectionActivity.this, LoginActivity.class);
+            BluetoothConnectionActivity.this.startActivity(n);
+            finish();
+        } else if (id == R.id.nav_ar) {
+            Locale locale = new Locale("ar");
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.setLocale(locale);
+            Resources resources = getResources();
+            resources.updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
+
+            Intent n = new Intent(BluetoothConnectionActivity.this, BluetoothConnectionActivity.class);
+            BluetoothConnectionActivity.this.startActivity(n);
+            finish();
+
+        } else if (id == R.id.nav_en) {
+            Locale locale = new Locale("en");
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.setLocale(locale);
+            Resources resources = getResources();
+            resources.updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
+            Intent n = new Intent(BluetoothConnectionActivity.this, BluetoothConnectionActivity.class);
             BluetoothConnectionActivity.this.startActivity(n);
             finish();
         }

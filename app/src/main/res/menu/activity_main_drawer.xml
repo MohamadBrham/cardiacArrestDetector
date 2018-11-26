@@ -4,38 +4,36 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+
         <item
             android:id="@+id/nav_beloved_list"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_beloved_24dp"
             android:title="@string/nav_beloved_circle_title" />
         <item
             android:id="@+id/nav_medications_list"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:icon="@mipmap/medication"
+            android:title="@string/nav_medications_title" />
+
     </group>
 
     <item android:title="Communicate">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-            <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Logout" />
+                android:icon="@mipmap/logout"
+                android:title="@string/nav_logout" />
+        </menu>
+    </item>
+    <item android:title="Language">
+        <menu>
+            <item
+                android:id="@+id/nav_ar"
+                android:icon="@mipmap/ar_en"
+                android:title="عربي" />
+            <item
+                android:id="@+id/nav_en"
+                android:icon="@mipmap/ar_en"
+                android:title="English" />
         </menu>
     </item>
 

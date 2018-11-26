@@ -39,6 +39,61 @@ public class myDbAdapter {
         beloved.setId(id);
         return beloved;
     }
+    public Medication insertMedicatin(Medication medication)
+    {
+        SQLiteDatabase dbb = myhelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(myDbHelper.USER_ID, medication.getUser_id());
+        contentValues.put(myDbHelper.START,medication.getStart());
+        contentValues.put(myDbHelper.END,medication.getEnd());
+        contentValues.put(myDbHelper.NAME,medication.getName());
+        long id = dbb.insert(myDbHelper.MEDICATIONS_TABLE, null , contentValues);
+        medication.setId(id);
+        return medication;
+    }
+
+    public ArrayList<Medication> getMedications(long user_id)
+    {
+        ArrayList<Medication> medication = new ArrayList<Medication>();
+        SQLiteDatabase db = myhelper.getWritableDatabase();
+        String[] columns = {myDbHelper.ID,myDbHelper.USER_ID,myDbHelper.START,myDbHelper.END ,myDbHelper.NAME};
+        String whereClause = myDbHelper.USER_ID +" = ? ";
+        String[] whereArgs = new String[] {""+user_id};
+        Cursor cursor = db.query(myDbHelper.MEDICATIONS_TABLE,columns,whereClause,whereArgs,null,null,null);
+        if(cursor != null)
+        {
+            while (cursor.moveToNext())
+            {
+                long id = cursor.getLong(cursor.getColumnIndex(myDbHelper.ID));
+                String start = cursor.getString(cursor.getColumnIndex(myDbHelper.START));
+                String  end =cursor.getString(cursor.getColumnIndex(myDbHelper.END));
+                String  name = cursor.getString(cursor.getColumnIndex(myDbHelper.NAME));
+                medication.add(new Medication(id,user_id,name,start,end));
+            }
+            cursor.close();
+        }
+        return medication;
+    }
+    public int deleteMedication(long id){
+        SQLiteDatabase db = myhelper.getWritableDatabase();
+        String[] whereArgs ={""+id};
+        int count = db.delete(myDbHelper.MEDICATIONS_TABLE ,myDbHelper.ID+" = ?",whereArgs);
+        return  count;
+    }
+    public int updateMedication(Medication medication){
+
+        SQLiteDatabase db = myhelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(myDbHelper.NAME,medication.getName());
+        contentValues.put(myDbHelper.START,medication.getStart());
+        contentValues.put(myDbHelper.END,medication.getEnd());
+        String[] whereArgs= {""+medication.getId()};
+        int count = db.update(myDbHelper.MEDICATIONS_TABLE,contentValues, myDbHelper.ID+" = ?",whereArgs );
+        return count;
+
+
+    }
+
     public ArrayList<Beloved> getBeloved(long user_id)
     {
         ArrayList<Beloved> beloved = new ArrayList<Beloved>();
@@ -68,19 +123,66 @@ public class myDbAdapter {
         int count = db.delete(myDbHelper.BELOVED_TABLE ,myDbHelper.ID+" = ?",whereArgs);
         return  count;
     }
-    public int updateBeloved(int id , String name, String phone){
+    public int updateBeloved(Beloved beloved){
 
             SQLiteDatabase db = myhelper.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
-            contentValues.put(myDbHelper.PHONE,phone);
-            contentValues.put(myDbHelper.NAME,name);
-            String[] whereArgs= {""+id};
+            contentValues.put(myDbHelper.PHONE,beloved.getPhone());
+            contentValues.put(myDbHelper.NAME,beloved.getName());
+            String[] whereArgs= {""+beloved.getId()};
             int count = db.update(myDbHelper.BELOVED_TABLE,contentValues, myDbHelper.ID+" = ?",whereArgs );
             return count;
 
 
     }
+    public ArrayList<Dose> getDoses(String medication_id)
+    {
+        ArrayList<Dose> doses = new ArrayList<Dose>();
+        SQLiteDatabase db = myhelper.getWritableDatabase();
+        String[] columns = {myDbHelper.ID,myDbHelper.MEDICATION_ID,myDbHelper.TIME};
+        String whereClause = myDbHelper.MEDICATION_ID+" = ? ";
+        String[] whereArgs = new String[] {""+medication_id};
+        Cursor cursor = db.query(myDbHelper.DOSES_TABLE,columns,whereClause,whereArgs,null,null,null);
+        if(cursor != null)
+        {
+            while (cursor.moveToNext())
+            {
+                long id = cursor.getLong(cursor.getColumnIndex(myDbHelper.ID));
+                long mid = cursor.getLong(cursor.getColumnIndex(myDbHelper.MEDICATION_ID));
+                String time = cursor.getString(cursor.getColumnIndex(myDbHelper.TIME));
+                doses.add(new Dose(id,mid,time));
+            }
+            cursor.close();
+        }
+        return doses;
+    }
+    public int deleteDose(int id){
+        SQLiteDatabase db = myhelper.getWritableDatabase();
+        String[] whereArgs ={""+id};
+        int count = db.delete(myDbHelper.DOSES_TABLE ,myDbHelper.ID+" = ?",whereArgs);
+        return  count;
+    }
+    public int updateDose(Dose dose){
 
+        SQLiteDatabase db = myhelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(myDbHelper.TIME,dose.getTime());
+        String[] whereArgs= {""+dose.getId()};
+        int count = db.update(myDbHelper.DOSES_TABLE,contentValues, myDbHelper.ID+" = ?",whereArgs );
+        return count;
+
+
+    }
+    public Dose insertDose(Dose dose)
+    {
+        SQLiteDatabase dbb = myhelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(myDbHelper.MEDICATION_ID, dose.getMedication_id());
+        contentValues.put(myDbHelper.TIME,dose.getTime());
+        long id = dbb.insert(myDbHelper.DOSES_TABLE, null , contentValues);
+        dose.setId(id);
+        return dose;
+    }
     public User getUser( String phone)
     {
         User user = null;
@@ -128,7 +230,7 @@ public class myDbAdapter {
     static class myDbHelper extends SQLiteOpenHelper
     {
         private static final String DATABASE_NAME = "myDatabase";    // Database
-        private static final int DATABASE_Version = 4;    // Database Version
+        private static final int DATABASE_Version = 5;    // Database Version
 
         // Users Table
         private static final String USERS_TABLE = "users";   // Table Name
@@ -150,8 +252,9 @@ public class myDbAdapter {
         private static final String MEDICATIONS_TABLE = "medications";   // Table Name
         //private static final String ID="id";     // Column I (Primary Key)
         //private static final String USER_ID = "user_id";    //Column II foreign key for users (id)
-        private static final String START = "start_date";    //Column III
-        private static final String END = "end_date";    //Column IV
+        //private static final String NAME = "name";    //Column III
+        private static final String START = "start_date";    //Column IV
+        private static final String END = "end_date";    //Column V
 
         // doses table
         private static final String DOSES_TABLE = "doses";   // Table Name
@@ -183,6 +286,7 @@ public class myDbAdapter {
                 + MEDICATIONS_TABLE + " ("
                 + ID + " integer primary key autoincrement, "
                 + USER_ID + " integer not null, "
+                + NAME + " text not null, "
                 + START+ " real not null, "
                 + END + " real not null,"
                 + " FOREIGN KEY ("+USER_ID+") REFERENCES "+USERS_TABLE+"("+ID+"));";

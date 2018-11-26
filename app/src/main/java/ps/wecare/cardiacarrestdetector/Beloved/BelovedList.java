@@ -72,7 +72,7 @@ public class BelovedList extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent n = new Intent(BelovedList.this, BelovedCircleActivity.class);
+                Intent n = new Intent(BelovedList.this, AddBeloved.class);
                 n.putExtra("NEW","NEW");
                 BelovedList.this.startActivity(n);
             }

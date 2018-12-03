@@ -128,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_weight="1"
-                android:text="@string/btn_next"
+                android:text="Delete"
                 android:textStyle="bold" />
             <Button
                 android:id="@+id/submit_btn"
@@ -137,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_weight="1"
-                android:text="@string/btn_next"
+                android:text="Add"
                 android:textStyle="bold" />
         </LinearLayout>
             <Button

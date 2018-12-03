@@ -13,18 +13,33 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import ps.wecare.cardiacarrestdetector.App;
 import ps.wecare.cardiacarrestdetector.Beloved.AddBeloved;
 import ps.wecare.cardiacarrestdetector.BluetoothConnectionActivity;
+import ps.wecare.cardiacarrestdetector.Doses.AddDose;
 import ps.wecare.cardiacarrestdetector.R;
 import ps.wecare.cardiacarrestdetector.db.Beloved;
+import ps.wecare.cardiacarrestdetector.db.Dose;
 import ps.wecare.cardiacarrestdetector.db.Medication;
 import ps.wecare.cardiacarrestdetector.db.Message;
 import ps.wecare.cardiacarrestdetector.db.myDbAdapter;
+
+import static ps.wecare.cardiacarrestdetector.Config.BASE_URL;
 
 public class AddMedication extends AppCompatActivity {
 
@@ -40,6 +55,11 @@ public class AddMedication extends AppCompatActivity {
     private Button submit_btn;
     private myDbAdapter helper;
     private boolean cancel;
+
+
+    private StringRequest request;
+    private String url = BASE_URL+"medications/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,9 +168,50 @@ public class AddMedication extends AppCompatActivity {
         }
         if (!cancel){
             Medication medication = new Medication(App.getInstance().getUserId(),name2,start,end);
-            medication = helper.insertMedicatin(medication);
-            Message.message(this," Id : "+medication.getId());
+            //edication = helper.insertMedicatin(medication);
+            //Message.message(this," Id : "+medication.getId());
+            sendOrder(medication);
         }
     }
+
+    private void sendOrder(final Medication medication) {
+        request =new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject= new JSONObject(response);
+                    Message.message(AddMedication.this, "Order SENT ");
+                    if(jsonObject.names().get(0).equals("added")){
+                        Message.message(AddMedication.this, "Order Submitted");
+                    }
+                    else{
+                        Message.message(AddMedication.this, "Creation Failed Wrong Input");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Message.message(AddMedication.this, "ERROR");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> hashMap=new HashMap<String, String>();
+                hashMap.put("name",medication.getName()+"");
+                hashMap.put("user_id",medication.getUser_id()+"");
+                hashMap.put("start",medication.getStart()+"");
+                hashMap.put("end",medication.getEnd()+"");
+                return hashMap;
+            }
+        };
+        App.getInstance().getRequestQueue().add(request);
+
+    }
+
 
 }

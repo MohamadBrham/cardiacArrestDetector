@@ -86,14 +86,9 @@ public class UpdateDose extends AppCompatActivity {
                 deleteDose();
 
                 finish();
-//
-//                if (res > 0){
-//                    finish();
-//                }
 
             }
         });
-        //Message.message(this,"string  "+id);
 
         set_time = (Button)findViewById(R.id.pick_time);
         set_time.setOnClickListener(new View.OnClickListener() {

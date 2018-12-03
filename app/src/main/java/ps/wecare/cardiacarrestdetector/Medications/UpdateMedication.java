@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -25,6 +26,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import ps.wecare.cardiacarrestdetector.App;
 import ps.wecare.cardiacarrestdetector.Config;
@@ -36,6 +39,8 @@ import ps.wecare.cardiacarrestdetector.db.Dose;
 import ps.wecare.cardiacarrestdetector.db.Medication;
 import ps.wecare.cardiacarrestdetector.db.Message;
 import ps.wecare.cardiacarrestdetector.db.myDbAdapter;
+
+import static ps.wecare.cardiacarrestdetector.Config.BASE_URL;
 
 public class UpdateMedication extends AppCompatActivity {
     private int mYear,mMonth,mDay;
@@ -59,6 +64,9 @@ public class UpdateMedication extends AppCompatActivity {
     private  ArrayList<Dose> doses;
     private ArrayList<String> values;
     private ArrayAdapter<String> adapter;
+
+    private StringRequest request;
+    private String url = BASE_URL+"medications/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +105,7 @@ public class UpdateMedication extends AppCompatActivity {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                helper.updateMedication(new Medication(Integer.parseInt(medication_id),App.getInstance().getUserId(),name.getText().toString(),start_date.getText().toString()  ,end_date.getText().toString()));
+                updateMedication(new Medication(Integer.parseInt(medication_id),App.getInstance().getUserId(),name.getText().toString(),start_date.getText().toString()  ,end_date.getText().toString()));
                 finish();
             }
         });
@@ -105,10 +113,8 @@ public class UpdateMedication extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int res = helper.deleteMedication(Integer.parseInt(medication_id));
-                if (res > 0){
-                    finish();
-                }
+                deleteMedication(medication_id);
+                finish();
 
             }
         });
@@ -191,19 +197,6 @@ public class UpdateMedication extends AppCompatActivity {
         // Assign adapter to ListView
         dosesListView.setAdapter(adapter);
 
-//        dosesListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view,
-//                                    int position, long id) {
-//                String  itemValue    = (String) dosesListView.getItemAtPosition(position);
-//                Intent n = new Intent(UpdateMedication.this, UpdateDose.class);
-//                n.putExtra("Id",""+doses.get(position).getId());
-//                n.putExtra("time",""+doses.get(position).getTime());
-//                UpdateMedication.this.startActivity(n);
-//            }
-//        });
-
-
     }
     @Override
     protected void onRestart() {
@@ -267,4 +260,70 @@ public class UpdateMedication extends AppCompatActivity {
         App.getInstance().getRequestQueue().add(getRequest);
 
     }
+    private void deleteMedication(String medication_id) {
+        request = new StringRequest(Request.Method.DELETE, url+ medication_id+"/", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject= new JSONObject(response);
+
+                    if(jsonObject.names().get(0).equals("deleted")){
+                        Message.message(UpdateMedication.this, "Order Submitted");
+                    }
+                    else{
+                        Message.message(UpdateMedication.this, "Creation Failed Wrong Input");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Message.message(UpdateMedication.this, "ERROR");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        App.getInstance().getRequestQueue().add(request);
+
+    }
+    private void updateMedication(final Medication medication) {
+        request =new StringRequest(Request.Method.PATCH, url+ medication_id+"/", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject= new JSONObject(response);
+
+                    if(jsonObject.names().get(0).equals("updated")){
+                        Message.message(UpdateMedication.this, "Order Submitted");
+                    }
+                    else{
+                        Message.message(UpdateMedication.this, "Creation Failed Wrong Input");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Message.message(UpdateMedication.this, "ERROR");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> hashMap=new HashMap<String, String>();
+                hashMap.put("name",medication.getName()+"");
+                hashMap.put("start",medication.getStart()+"");
+                hashMap.put("end",medication.getEnd()+"");
+                return hashMap;
+            }
+        };
+        App.getInstance().getRequestQueue().add(request);
+
+    }
+
 }

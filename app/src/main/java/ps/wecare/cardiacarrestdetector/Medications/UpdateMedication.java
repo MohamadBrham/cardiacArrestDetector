@@ -14,10 +14,20 @@ import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import ps.wecare.cardiacarrestdetector.App;
+import ps.wecare.cardiacarrestdetector.Config;
 import ps.wecare.cardiacarrestdetector.Doses.AddDose;
 import ps.wecare.cardiacarrestdetector.Doses.UpdateDose;
 import ps.wecare.cardiacarrestdetector.R;
@@ -46,7 +56,7 @@ public class UpdateMedication extends AppCompatActivity {
 
     // Doses List View
     private ListView dosesListView;
-    private ArrayList<Dose> doses;
+    private  ArrayList<Dose> doses;
     private ArrayList<String> values;
     private ArrayAdapter<String> adapter;
 
@@ -155,12 +165,15 @@ public class UpdateMedication extends AppCompatActivity {
 
         dosesListView = (ListView) findViewById(R.id.doses_list);
         dosesListView.setTranscriptMode(0);
-        helper = App.getInstance().getDbHelper();
-        doses = helper.getDoses(medication_id);
+
+        values = new ArrayList<>();
+        doses = new ArrayList<Dose>();
+
+        getDoses(medication_id);
 
         add_dose = (Button)findViewById(R.id.add_dose);
 
-            add_dose.setVisibility(View.VISIBLE);
+        add_dose.setVisibility(View.VISIBLE);
 
         add_dose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,41 +185,86 @@ public class UpdateMedication extends AppCompatActivity {
         });
 
 
-        // Defined Array values to show in ListView
-        values = new ArrayList<>();
-
-        for(int i = 0; i<doses.size();i++){
-            values.add(" Dose # "+ (i+1)+" " +doses.get(i).getTime());
-        }
-
         adapter = new ArrayAdapter<String>(this,
                 R.layout.centered_list_view_item, android.R.id.text1, values);
 
         // Assign adapter to ListView
         dosesListView.setAdapter(adapter);
 
-        dosesListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                String  itemValue    = (String) dosesListView.getItemAtPosition(position);
-                Intent n = new Intent(UpdateMedication.this, UpdateDose.class);
-                n.putExtra("Id",""+doses.get(position).getId());
-                n.putExtra("time",""+doses.get(position).getTime());
-                UpdateMedication.this.startActivity(n);
-            }
-        });
+//        dosesListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view,
+//                                    int position, long id) {
+//                String  itemValue    = (String) dosesListView.getItemAtPosition(position);
+//                Intent n = new Intent(UpdateMedication.this, UpdateDose.class);
+//                n.putExtra("Id",""+doses.get(position).getId());
+//                n.putExtra("time",""+doses.get(position).getTime());
+//                UpdateMedication.this.startActivity(n);
+//            }
+//        });
 
 
     }
     @Override
     protected void onRestart() {
         super.onRestart();
-        doses = helper.getDoses(medication_id);
-        values.clear();
-        for(int i = 0; i<doses.size();i++){
-            values.add(" Dose # "+ (i+1)+" " +doses.get(i).getTime());
-        }
+        getDoses(medication_id);
         adapter.notifyDataSetChanged();
+    }
+
+    public void getDoses(String medication_id){
+        final ArrayList<Dose> doses = new ArrayList<Dose>();
+        String url = Config.BASE_URL +"medicationdoses/"+medication_id+"/";
+        final StringRequest getRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+
+                        JSONArray array = null;
+                        try {
+                            array = new JSONArray(response);
+                            for (int i = 0; i < array.length(); i++) {
+                                JSONObject row = array.getJSONObject(i);
+
+                                doses.add(new Dose(row.getLong("id"),row.getLong("medication_id"),row.getString("time")));
+
+                            }
+                            values.clear();
+                            for(int i = 0; i< doses.size();i++){
+                                values.add(" Dose # "+ (i+1)+" " +doses.get(i).getTime());
+                            }
+                            adapter.notifyDataSetChanged();
+
+                            dosesListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view,
+                                                        int position, long id) {
+                                    String  itemValue    = (String) dosesListView.getItemAtPosition(position);
+                                    Intent n = new Intent(UpdateMedication.this, UpdateDose.class);
+                                    n.putExtra("Id",""+doses.get(position).getId());
+                                    n.putExtra("time",""+doses.get(position).getTime());
+                                    UpdateMedication.this.startActivity(n);
+                                }
+                            });
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Message.message(UpdateMedication.this,"ERRRR");
+                        //Log.d("Error.Response", response);
+                    }
+                }
+        );
+// add it to the RequestQueue
+        App.getInstance().getRequestQueue().add(getRequest);
+
     }
 }

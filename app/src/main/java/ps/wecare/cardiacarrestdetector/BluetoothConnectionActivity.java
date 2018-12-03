@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -21,25 +22,44 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 import ps.wecare.cardiacarrestdetector.Beloved.AddBeloved;
 import ps.wecare.cardiacarrestdetector.Beloved.BelovedList;
+import ps.wecare.cardiacarrestdetector.Doses.AddDose;
 import ps.wecare.cardiacarrestdetector.Medications.AddMedication;
 import ps.wecare.cardiacarrestdetector.Medications.MedicationsList;
 import ps.wecare.cardiacarrestdetector.db.Beloved;
+import ps.wecare.cardiacarrestdetector.db.Dose;
 import ps.wecare.cardiacarrestdetector.db.Message;
 import ps.wecare.cardiacarrestdetector.db.myDbAdapter;
+
+import static ps.wecare.cardiacarrestdetector.Config.BASE_URL;
 
 
 public class BluetoothConnectionActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
@@ -59,6 +79,27 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
     private myDbAdapter helper;
     private GraphView graph;
     private NavigationView navigationView;
+    private  String patientData = "";
+
+    private StringRequest request;
+    private String url = BASE_URL+"data/";
+
+    private Handler mainHandler = new Handler();
+    private Runnable backgroundTask = new Runnable() {
+        @Override
+        public void run() {
+            if (!patientData.equals("")){
+                    sendData();
+
+                    Message.message(BluetoothConnectionActivity.this,"Data sent to server" + patientData);
+
+                }
+
+                Message.message(BluetoothConnectionActivity.this,"Activated");
+
+                patientData ="";            mainHandler.postDelayed(this, 10000);
+        }
+    };
 
 
     @Override
@@ -172,6 +213,8 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
                 //Toast.makeText(BluetoothConnectionActivity.this,  message , Toast.LENGTH_LONG).show();
                 //series.appendData(new DataPoint(lastX++ , Integer.parseInt(message)), true, 100);
                 series.appendData(new DataPoint(lastX++ , Double.parseDouble(message)), true, 100);
+                patientData += ""+ message +".00,";
+
                 bluetooth.send(START, true);
             }
         });
@@ -192,6 +235,63 @@ public class BluetoothConnectionActivity extends AppCompatActivity  implements N
                 bluetooth.send(START, true);
             }
         });
+
+
+        mainHandler.postDelayed(backgroundTask, 10000);
+
+//        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+//        scheduler.scheduleAtFixedRate(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                // TODO Auto-generated method stub
+//                if (!patientData.equals("")){
+//                    sendData();
+//
+//                    Message.message(BluetoothConnectionActivity.this,"Data sent to server");
+//
+//                }
+//
+//                Message.message(BluetoothConnectionActivity.this,"Activated");
+//
+//                patientData ="";
+//            }
+//        }, 10, 10, TimeUnit.SECONDS);
+    }
+
+    public void sendData(){
+            request =new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonObject= new JSONObject(response);
+
+                        if(jsonObject.names().get(0).equals("positive")){
+                            Message.message(BluetoothConnectionActivity.this, "YOU ARE SAFE");
+                        }
+                        else{
+                            Message.message(BluetoothConnectionActivity.this, " PROBLEM DETECTED");
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Message.message(BluetoothConnectionActivity.this, "ERROR");
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    HashMap<String,String> hashMap=new HashMap<String, String>();
+                    hashMap.put("data",patientData+"");
+                    return hashMap;
+                }
+            };
+            App.getInstance().getRequestQueue().add(request);
 
     }
     @Override

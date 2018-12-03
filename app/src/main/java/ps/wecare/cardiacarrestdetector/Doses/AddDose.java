@@ -125,10 +125,8 @@ public class AddDose extends AppCompatActivity {
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObject= new JSONObject(response);
-                    Message.message(AddDose.this, "REsponce ");
 
-
-                    if(jsonObject.names().get(0).equals("name")){
+                    if(jsonObject.names().get(0).equals("added")){
                         Message.message(AddDose.this, "Order Submitted");
                     }
                     else{
